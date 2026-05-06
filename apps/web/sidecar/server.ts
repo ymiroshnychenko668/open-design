@@ -27,7 +27,7 @@ import {
   type SidecarRuntimeContext,
 } from "@open-design/sidecar";
 
-const HOST = process.env.OD_HOST || "127.0.0.1";
+const HOST = process.env.OD_HOST || process.env.OD_BIND_HOST || "127.0.0.1";
 if (process.env.OD_HOST != null && !/^[a-zA-Z0-9._\-:[\]@]+$/.test(process.env.OD_HOST)) {
   throw new Error(`OD_HOST contains invalid characters: ${process.env.OD_HOST}`);
 }

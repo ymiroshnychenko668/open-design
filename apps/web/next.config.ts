@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 // the same env so /api, /artifacts, and /frames always reach the right
 // daemon instance during `next dev`.
 const DAEMON_PORT = Number(process.env.OD_PORT) || 7456;
-const DAEMON_ORIGIN = `http://127.0.0.1:${DAEMON_PORT}`;
+const DAEMON_HOST = process.env.OD_BIND_HOST || process.env.OD_HOST || '127.0.0.1';
+const DAEMON_ORIGIN = `http://${DAEMON_HOST}:${DAEMON_PORT}`;
 
 // The regular CLI build still ships as a static export so the `od` daemon can
 // serve a single-process production build. Packaged desktop builds opt into a
@@ -42,7 +43,7 @@ function resolveDevTsconfigPath() {
 const DEV_TSCONFIG_PATH = resolveDevTsconfigPath();
 
 const nextConfig: NextConfig = {
-  allowedDevOrigins: ['127.0.0.1'],
+  allowedDevOrigins: [DAEMON_HOST],
   reactStrictMode: true,
   ...(DEV_TSCONFIG_PATH ? { typescript: { tsconfigPath: DEV_TSCONFIG_PATH } } : {}),
   // Keep the bundle output predictable so the daemon's STATIC_DIR can point
